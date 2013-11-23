@@ -49,11 +49,18 @@ require_once ('lib/ini.php');
 		}
 		
 		echo "\n<BR> {$filename}";
-		$json[iconv("BIG-5","UTF-8",$filename)] =  array(
+		
+		if (is_link($filename)) {
+			$json[iconv("BIG-5","UTF-8",$filename)] =  array(
+					'type' => 'link'
+					);
+		} else {
+			$json[iconv("BIG-5","UTF-8",$filename)] =  array(
 					'size' => filesize($filename),
 					'mtime' => filemtime($filename),
 					'md5' => md5(file_get_contents($filename))
 					);
+		}
     }
 	
 	file_put_contents($file['list'], json_encode($json));
